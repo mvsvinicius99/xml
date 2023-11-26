@@ -1,0 +1,56 @@
+import xml.etree.ElementTree as ET
+import pandas as pd
+
+# Defina o caminho do arquivo XML
+xml_path  = (r"D:\Users\Antônio Marcos\OneDrive\SERVIDOR\PROGRAMAÇÃO\ACOMPANHAMENTO\OUTROS\Xml\35231162227509002920550000006866231006677412-nfe.xml")
+
+# Analise o XML
+tree = ET.parse(xml_path)
+root = tree.getroot()
+
+# Defina o namespace
+namespace = {'nfe': 'http://www.portalfiscal.inf.br/nfe'}
+
+#verificando quantos produtos há na NF
+for det_element in root.findall('.//nfe:det', namespace):
+    # Acessar o atributo nItem
+    nItem = det_element.get('nItem')
+
+    # Extrair informações desejadas ou adicionar None se não existirem
+    xProd = det_element.find('.//nfe:xProd', namespace).text
+    xProd = (xProd + ' | ' + xProd)
+
+print(xProd)
+# Extraia as informações desejadas do XML e crie um DataFrame
+data = {'Id': [root.find('.//nfe:infNFe', namespace).attrib['Id']],
+        'nNF': [root.find('.//nfe:nNF', namespace).text],
+        'dhEmi': [root.find('.//nfe:dhEmi', namespace).text],
+        'xNomeEmi': [root.find('.//nfe:xNome', namespace).text],
+        'CNPJemi': [root.find('.//nfe:CNPJ', namespace).text],
+        'xMunEmit': [root.find('.//nfe:xMun', namespace).text],
+        'xNomeDest': [root.find('.//nfe:xNome', namespace).text],
+        'CNPJDest': [root.find('.//nfe:CNPJ', namespace).text],
+        'xMunDest': [root.find('.//nfe:xMun', namespace).text],
+        'xprod': [root.find('.//nfe:xProd', namespace).text],
+        'tpNF': [root.find('.//nfe:tpNF', namespace).text],
+        'idDest': [root.find('.//nfe:idDest', namespace).text],
+        'cMunFG': [root.find('.//nfe:cMunFG', namespace).text],
+        'tpImp': [root.find('.//nfe:tpImp', namespace).text],
+        'tpEmis': [root.find('.//nfe:tpEmis', namespace).text],
+        'cDV': [root.find('.//nfe:cDV', namespace).text],
+        'tpAmb': [root.find('.//nfe:tpAmb', namespace).text],
+        'finNFe': [root.find('.//nfe:finNFe', namespace).text],
+        'indFinal': [root.find('.//nfe:indFinal', namespace).text],
+        'indPres': [root.find('.//nfe:indPres', namespace).text],
+        'indIntermed': [root.find('.//nfe:indIntermed', namespace).text],
+        'procEmi': [root.find('.//nfe:procEmi', namespace).text],
+        'verProc': [root.find('.//nfe:verProc', namespace).text],
+        'CNPJ': [root.find('.//nfe:CNPJ', namespace).text],
+        'xNome': [root.find('.//nfe:xNome', namespace).text],
+        'infCpl': [root.find('.//nfe:infCpl', namespace).text]}
+
+# Crie um DataFrame
+df = pd.DataFrame(data)
+
+# Exiba o DataFrame
+#print(df['xprod'])
